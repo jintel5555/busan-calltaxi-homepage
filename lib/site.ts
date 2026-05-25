@@ -8,6 +8,7 @@ export const siteConfig = {
   phoneHref: "tel:050713337114",
   smsHref: "sms:050713337114",
   kakaoUrl: "https://pf.kakao.com/_QRGwn",
+  kakaoChatUrl: "https://pf.kakao.com/_QRGwn/chat",
   naverTalkUrl: "https://talk.naver.com/ct/ww4d5rr",
   address: "부산광역시 전 지역 배차",
   image:
@@ -32,11 +33,10 @@ export const seoKeywords = [
 
 export const navItems = [
   { href: "/", label: "홈" },
-  { href: "/inquiry", label: "실시간 문의" },
+  { href: "https://pf.kakao.com/_QRGwn/chat", label: "실시간 문의" },
   { href: "/reviews", label: "후기" },
   { href: "/tour-courses", label: "관광코스" },
   { href: "/drivers", label: "기사 소개" },
-  { href: "/reservation", label: "예약문의" },
   { href: "/gimhae-airport-pickup", label: "김해공항" },
   { href: "/busan-tour-taxi", label: "관광택시" },
   { href: "/long-distance-taxi", label: "장거리택시" },
