@@ -2,14 +2,15 @@ import Link from "next/link";
 import {
   ArrowRight,
   BadgeCheck,
+  Camera,
   CarFront,
   Clock3,
   Luggage,
   MapPinned,
   MessageCircle,
+  NotebookText,
   Phone,
   Plane,
-  Send,
   ShieldCheck
 } from "lucide-react";
 import { HomeFaqPreview } from "@/components/home/home-faq-preview";
@@ -76,18 +77,18 @@ export default async function HomePage() {
                 </a>
               </Button>
               <Button asChild size="xl" className="bg-white text-black hover:bg-white/90">
-                <a href={siteConfig.smsHref}>
-                  <Send /> 문자문의
+                <a href="https://blog.naver.com/ceorang/224271695688" target="_blank" rel="noreferrer">
+                  <NotebookText /> 네이버블로그
+                </a>
+              </Button>
+              <Button asChild size="xl" className="bg-white text-black hover:bg-white/90">
+                <a href="https://www.instagram.com/raontaxi" target="_blank" rel="noreferrer">
+                  <Camera /> 인스타그램
                 </a>
               </Button>
               <Button asChild size="xl" className="bg-[#FEE500] text-[#191600] hover:bg-[#FEE500]/90">
                 <a href={siteConfig.kakaoUrl} target="_blank" rel="noreferrer">
                   <MessageCircle /> 카카오톡
-                </a>
-              </Button>
-              <Button asChild size="xl" className="bg-[#03C75A] text-white hover:bg-[#03C75A]/90">
-                <a href={siteConfig.naverTalkUrl} target="_blank" rel="noreferrer">
-                  <Send /> 네이버 톡톡
                 </a>
               </Button>
             </div>
