@@ -54,15 +54,14 @@ export default async function HomePage() {
           <div className="soft-rise max-w-3xl space-y-5">
             <div className="flex flex-wrap gap-2">
               <Badge className="border-white/15 bg-white/12 text-white backdrop-blur">24시간 상담</Badge>
-              <Badge className="border-white/15 bg-[#f4c74d] text-[#171306]">새벽 공항콜</Badge>
-              <Badge className="border-white/15 bg-[#20d7c5] text-[#031514]">VIP 기사 서비스</Badge>
+              <Badge className="border-white/15 bg-[#f4c74d] text-[#171306]">쾌적한 금연 차량</Badge>
+              <Badge className="border-white/15 bg-[#20d7c5] text-[#031514]">친절한 젊은 기사</Badge>
             </div>
             <div className="space-y-4">
               <p className="text-lg font-bold text-[#f4c74d] md:text-xl">부산 장거리택시 · 김해공항 · 부산관광 전문</p>
-              <h1 className="text-4xl font-black leading-tight md:text-6xl">{siteConfig.name}</h1>
+              <h1 className="text-[35px] font-black leading-tight md:text-[59px]">{siteConfig.name}</h1>
               <p className="max-w-2xl text-lg leading-8 text-white/86">
-                부산 야경처럼 차분하고 고급스럽게, 공항 픽업부터 장거리 이동과 관광 코스까지 한 번에 예약하는
-                모바일 택시 후기 플랫폼입니다.
+                부산의 밤처럼 조용하고 편안한 이동, 관광택시부터 장거리까지
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
