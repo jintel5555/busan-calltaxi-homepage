@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const reviews = await getPublishedReviews(60);
+  const reviews = await getPublishedReviews(300);
 
   return (
     <>
