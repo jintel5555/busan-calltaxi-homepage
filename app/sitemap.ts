@@ -7,12 +7,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const reviews = await getPublishedReviews(100);
   const now = new Date();
 
-  const staticRoutes = navItems.map((item) => ({
-    url: `${siteConfig.url}${item.href}`,
-    lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: item.href === "/" ? 1 : 0.82
-  }));
+  const staticRoutes = navItems
+    .filter((item) => item.href.startsWith("/"))
+    .map((item) => ({
+      url: `${siteConfig.url}${item.href}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: item.href === "/" ? 1 : 0.82
+    }));
 
   const reviewRoutes = reviews.map((review) => ({
     url: `${siteConfig.url}/reviews/${createReviewSlug(review)}`,
