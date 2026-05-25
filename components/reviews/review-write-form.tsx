@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { primaryTags } from "@/lib/site";
+import type { Review } from "@/lib/types";
 
-export function ReviewWriteForm({ onCreated }: { onCreated?: () => void }) {
+export function ReviewWriteForm({ onCreated }: { onCreated?: (review: Review) => void }) {
   const [rating, setRating] = useState(5);
   const [tags, setTags] = useState<string[]>(["지역"]);
   const [pending, setPending] = useState(false);
@@ -46,7 +47,7 @@ export function ReviewWriteForm({ onCreated }: { onCreated?: () => void }) {
       form.reset();
       setRating(5);
       setTags(["지역"]);
-      onCreated?.();
+      onCreated?.(result.review as Review);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.");
     } finally {
