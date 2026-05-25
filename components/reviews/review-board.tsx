@@ -1,15 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
-import { ReviewCard } from "@/components/reviews/review-card";
+import Link from "next/link";
+import { Eye, MessageSquarePlus, Search, ThumbsUp } from "lucide-react";
+import { Stars } from "@/components/reviews/review-card";
 import { ReviewWriteForm } from "@/components/reviews/review-write-form";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { primaryTags } from "@/lib/site";
 import type { Review } from "@/lib/types";
+import { createReviewSlug, excerpt, formatKoreanDate } from "@/lib/utils";
 
 export function ReviewBoard({ reviews }: { reviews: Review[] }) {
+  const [localReviews, setLocalReviews] = useState(reviews);
   const [query, setQuery] = useState("");
   const [tag, setTag] = useState("전체");
   const [sort, setSort] = useState<"latest" | "popular">("latest");
@@ -17,7 +20,7 @@ export function ReviewBoard({ reviews }: { reviews: Review[] }) {
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return reviews
+    return localReviews
       .filter((review) => {
         const matchesQuery =
           !normalizedQuery ||
@@ -31,7 +34,13 @@ export function ReviewBoard({ reviews }: { reviews: Review[] }) {
         if (sort === "popular") return b.likes + b.views - (a.likes + a.views);
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       });
-  }, [query, reviews, sort, tag]);
+  }, [localReviews, query, sort, tag]);
+
+  function addCreatedReview(review: Review) {
+    setLocalReviews((current) => [review, ...current]);
+    setShowForm(false);
+    setSort("latest");
+  }
 
   return (
     <div className="space-y-6">
@@ -58,6 +67,7 @@ export function ReviewBoard({ reviews }: { reviews: Review[] }) {
           className="h-12 rounded-lg bg-primary px-5 text-sm font-black text-primary-foreground"
           onClick={() => setShowForm((value) => !value)}
         >
+          <MessageSquarePlus className="mr-2 inline size-4" />
           후기 작성
         </button>
       </div>
@@ -70,12 +80,50 @@ export function ReviewBoard({ reviews }: { reviews: Review[] }) {
         ))}
       </div>
 
-      {showForm ? <ReviewWriteForm onCreated={() => setShowForm(false)} /> : null}
+      {showForm ? <ReviewWriteForm onCreated={addCreatedReview} /> : null}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {filtered.map((review) => (
-          <ReviewCard key={review.id} review={review} />
-        ))}
+      <div className="overflow-hidden rounded-lg border bg-card">
+        <div className="hidden grid-cols-[minmax(0,1fr)_8rem_8rem_7rem] border-b bg-muted/45 px-5 py-3 text-sm font-black text-muted-foreground md:grid">
+          <span>후기 제목</span>
+          <span>작성자</span>
+          <span>작성일</span>
+          <span className="text-right">반응</span>
+        </div>
+        <div className="divide-y">
+          {filtered.map((review) => (
+            <Link
+              key={review.id}
+              href={`/reviews/${createReviewSlug(review)}`}
+              className="grid gap-3 px-4 py-5 transition hover:bg-muted/35 md:grid-cols-[minmax(0,1fr)_8rem_8rem_7rem] md:items-center md:px-5"
+            >
+              <div className="min-w-0 space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Stars rating={review.rating} />
+                  {review.featured ? <Badge variant="accent">베스트</Badge> : null}
+                  {review.tags.slice(0, 3).map((item) => (
+                    <Badge key={item} variant="secondary">
+                      #{item}
+                    </Badge>
+                  ))}
+                </div>
+                <h3 className="truncate text-lg font-black">{review.title}</h3>
+                <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">{excerpt(review.content, 120)}</p>
+              </div>
+              <span className="text-sm font-semibold text-muted-foreground md:text-foreground">{review.author}</span>
+              <span className="text-sm text-muted-foreground">{formatKoreanDate(review.created_at)}</span>
+              <span className="flex items-center gap-3 text-sm text-muted-foreground md:justify-end">
+                <span className="inline-flex items-center gap-1">
+                  <Eye className="size-4" />
+                  {review.views}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <ThumbsUp className="size-4" />
+                  {review.likes}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {!filtered.length ? (
