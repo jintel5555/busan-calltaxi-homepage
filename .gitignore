@@ -7,6 +7,8 @@ dist
 *.log
 *.out
 *.err
+.github-deploy-key
+.github-deploy-key.pub
 vite-dev.out
 vite-dev.err
 vercel.json
