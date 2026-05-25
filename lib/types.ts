@@ -1,4 +1,4 @@
-export type ReviewTag = "지역" | "공항" | "관광" | "장거리" | "VIP" | "새벽콜";
+export type ReviewTag = "부산역" | "공항" | "관광" | "장거리" | "새벽콜";
 
 export type Review = {
   id: string;
