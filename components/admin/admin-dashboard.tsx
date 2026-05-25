@@ -4,6 +4,7 @@ import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
 import { Bot, EyeOff, Medal, Pencil, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { AdminLoginCard, getAdminSessionToken } from "@/components/admin/admin-login-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,6 @@ const aiFields = [
 ] as const;
 
 export function AdminDashboard({ reviews }: { reviews: Review[] }) {
-  const [adminKey, setAdminKey] = useState("");
   const [accessToken, setAccessToken] = useState(() =>
     typeof window === "undefined" ? "" : localStorage.getItem("busan_admin_access_token") || ""
   );
@@ -40,7 +40,8 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
     const result: Record<string, string> = {
       "content-type": "application/json"
     };
-    if (adminKey) result["x-admin-key"] = adminKey;
+    const adminSession = getAdminSessionToken();
+    if (adminSession) result["x-admin-session"] = adminSession;
     if (accessToken) result.authorization = `Bearer ${accessToken}`;
     return result;
   }
@@ -170,24 +171,16 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
   }
 
   return (
+    <AdminLoginCard>
     <div className="space-y-8">
       <section className="rounded-lg border bg-card p-5">
         <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <h2 className="text-xl font-black">관리자 인증</h2>
+          <h2 className="text-xl font-black">관리자 메뉴</h2>
           <Button asChild type="button" variant="outline">
             <Link href="/admin/faqs">FAQ 관리 페이지</Link>
           </Button>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
-          <label className="space-y-2 text-sm font-semibold">
-            관리자 키
-            <Input
-              type="password"
-              value={adminKey}
-              onChange={(event) => setAdminKey(event.target.value)}
-              placeholder="ADMIN_SECRET"
-            />
-          </label>
+        <div className="grid gap-3">
           <label className="space-y-2 text-sm font-semibold">
             Supabase 토큰
             <Input
@@ -324,5 +317,6 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         </div>
       </section>
     </div>
+    </AdminLoginCard>
   );
 }

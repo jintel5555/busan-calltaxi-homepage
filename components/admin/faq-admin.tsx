@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { EyeOff, Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { AdminLoginCard, getAdminSessionToken } from "@/components/admin/admin-login-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +11,6 @@ import type { Faq } from "@/lib/types";
 
 export function FaqAdmin({ faqs }: { faqs: Faq[] }) {
   const [items, setItems] = useState(faqs);
-  const [adminKey, setAdminKey] = useState("");
   const [accessToken, setAccessToken] = useState(() =>
     typeof window === "undefined" ? "" : localStorage.getItem("busan_admin_access_token") || ""
   );
@@ -18,7 +18,8 @@ export function FaqAdmin({ faqs }: { faqs: Faq[] }) {
 
   function headers() {
     const result: Record<string, string> = { "content-type": "application/json" };
-    if (adminKey) result["x-admin-key"] = adminKey;
+    const adminSession = getAdminSessionToken();
+    if (adminSession) result["x-admin-session"] = adminSession;
     if (accessToken) result.authorization = `Bearer ${accessToken}`;
     return result;
   }
@@ -94,13 +95,10 @@ export function FaqAdmin({ faqs }: { faqs: Faq[] }) {
   }
 
   return (
+    <AdminLoginCard>
     <div className="space-y-8">
       <section className="rounded-lg border bg-card p-5">
-        <div className="grid gap-3 md:grid-cols-2">
-          <label className="space-y-2 text-sm font-semibold">
-            관리자 키
-            <Input type="password" value={adminKey} onChange={(event) => setAdminKey(event.target.value)} />
-          </label>
+        <div className="grid gap-3">
           <label className="space-y-2 text-sm font-semibold">
             Supabase 토큰
             <Input
@@ -157,6 +155,7 @@ export function FaqAdmin({ faqs }: { faqs: Faq[] }) {
         ))}
       </section>
     </div>
+    </AdminLoginCard>
   );
 }
 
