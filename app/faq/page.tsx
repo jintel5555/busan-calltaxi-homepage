@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { Badge } from "@/components/ui/badge";
+import { faqHeroDescription } from "@/lib/faq-content";
 import { getPublishedFaqs } from "@/lib/faqs";
 import { faqSchema } from "@/lib/seo";
 
@@ -10,17 +11,15 @@ export const metadata: Metadata = {
   description: "부산 장거리택시, 김해공항 픽업, 부산 관광택시 예약 전 자주 묻는 질문입니다."
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function FaqPage() {
   const faqs = await getPublishedFaqs();
 
   return (
     <>
       <JsonLd data={faqSchema(faqs.map((faq) => ({ question: faq.question, answer: faq.answer })))} />
-      <PageHero
-        eyebrow="FAQ"
-        title="자주 묻는 질문"
-        description="관리자가 직접 추가한 예약, 공항 픽업, 관광택시, 장거리 이동 관련 안내입니다."
-      />
+      <PageHero eyebrow="FAQ" title="자주 묻는 질문" description={faqHeroDescription} />
       <section className="py-12">
         <div className="mx-auto max-w-4xl space-y-4 px-4">
           {faqs.map((faq) => (
