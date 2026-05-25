@@ -27,12 +27,6 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const ip = getClientIp(request);
-  const rate = checkRateLimit(`review:${ip}`, 5, 10 * 60_000);
-  if (!rate.ok) {
-    return NextResponse.json({ error: "잠시 후 다시 시도해주세요." }, { status: 429 });
-  }
-
   const json = await request.json().catch(() => null);
   const parsed = reviewPayloadSchema.safeParse(json);
   if (!parsed.success) {
@@ -44,6 +38,14 @@ export async function POST(request: Request) {
   }
 
   const isAdmin = await isAdminRequest(request);
+  if (!isAdmin) {
+    const ip = getClientIp(request);
+    const rate = checkRateLimit(`review:${ip}`, 5, 10 * 60_000);
+    if (!rate.ok) {
+      return NextResponse.json({ error: "잠시 후 다시 시도해주세요." }, { status: 429 });
+    }
+  }
+
   if ((parsed.data.ai_generated || parsed.data.featured) && !isAdmin) {
     return NextResponse.json({ error: "관리자 권한이 필요합니다." }, { status: 401 });
   }
