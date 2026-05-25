@@ -18,8 +18,8 @@ export default async function AdminPage() {
     <>
       <PageHero
         eyebrow="Admin"
-        title="후기와 공지 관리"
-        description="후기 삭제, 수정, 숨김, 베스트 지정, AI 후기 생성 후 승인 등록을 처리합니다."
+        title="관리자 모드"
+        description="운영자 전용 관리 기능이 제공되는 공간입니다."
       />
       <section className="py-12">
         <div className="mx-auto max-w-6xl px-4">
