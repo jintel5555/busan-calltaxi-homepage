@@ -1,10 +1,10 @@
-import { dummyFaqs } from "@/lib/dummy-data";
+import { siteFaqs } from "@/lib/faq-content";
 import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase";
 import type { Faq } from "@/lib/types";
 
 export async function getPublishedFaqs(): Promise<Faq[]> {
   if (!hasSupabaseAdminEnv()) {
-    return dummyFaqs;
+    return siteFaqs;
   }
 
   const supabase = createSupabaseAdminClient();
@@ -16,7 +16,7 @@ export async function getPublishedFaqs(): Promise<Faq[]> {
     .order("created_at", { ascending: false });
 
   if (error || !data) {
-    return dummyFaqs;
+    return siteFaqs;
   }
 
   return data as Faq[];
@@ -24,7 +24,7 @@ export async function getPublishedFaqs(): Promise<Faq[]> {
 
 export async function getAllFaqsForAdmin(): Promise<Faq[]> {
   if (!hasSupabaseAdminEnv()) {
-    return dummyFaqs;
+    return siteFaqs;
   }
 
   const supabase = createSupabaseAdminClient();
@@ -35,7 +35,7 @@ export async function getAllFaqsForAdmin(): Promise<Faq[]> {
     .order("created_at", { ascending: false });
 
   if (error || !data) {
-    return dummyFaqs;
+    return siteFaqs;
   }
 
   return data as Faq[];
