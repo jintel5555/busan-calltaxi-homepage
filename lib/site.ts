@@ -43,4 +43,4 @@ export const navItems = [
   { href: "/faq", label: "FAQ" }
 ];
 
-export const primaryTags = ["지역", "공항", "관광", "장거리", "VIP", "새벽콜"];
+export const primaryTags = ["부산역", "공항", "관광", "장거리", "새벽콜"];
