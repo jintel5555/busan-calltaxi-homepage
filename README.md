@@ -20,6 +20,18 @@ npm run dev
 
 브라우저에서 `http://localhost:3000`을 엽니다.
 
+## 어디서든 온라인 작업
+
+이 저장소는 GitHub를 기준으로 작업하면 어느 컴퓨터에서도 이어서 수정할 수 있습니다.
+
+1. GitHub 저장소 `https://github.com/jintel5555/busan-calltaxi-homepage`에 접속합니다.
+2. `Code` 버튼에서 `Codespaces`를 선택하고 새 codespace를 엽니다.
+3. 브라우저 안의 VS Code 터미널에서 `npm run dev`를 실행합니다.
+4. 포트 `3000` 미리보기를 열어 수정 내용을 확인합니다.
+5. 변경사항을 commit 후 `main` 브랜치에 push하면 Vercel이 운영 사이트를 자동 배포합니다.
+
+`.devcontainer/devcontainer.json`은 Codespaces가 열릴 때 Node.js 개발환경을 만들고 `npm ci`를 실행하도록 설정합니다. `.github/workflows/validate.yml`은 push와 pull request 때 `lint`와 `build`를 자동 검증합니다.
+
 ## 환경변수
 
 `env.example`을 참고해 `.env.local`을 만듭니다.
@@ -30,7 +42,9 @@ NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 SUPABASE_REVIEW_IMAGE_BUCKET=review-images
-ADMIN_SECRET=긴_랜덤_문자열
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=긴_관리자_비밀번호
+ADMIN_SECRET=긴_랜덤_서명_문자열
 OPENAI_API_KEY=...
 OPENAI_REVIEW_MODEL=gpt-5-mini
 ```
@@ -55,7 +69,7 @@ on conflict (id) do update set role = 'admin';
 
 ## 관리자 페이지
 
-`/admin`에서 `ADMIN_SECRET` 값을 입력하면 관리자 API를 사용할 수 있습니다. Supabase Auth 기반 권한 분리도 포함되어 있어, Bearer 토큰이 있는 경우 `users.role = 'admin'` 계정을 관리자 요청으로 처리합니다.
+`/admin`에서 `ADMIN_USERNAME`과 `ADMIN_PASSWORD`로 로그인하면 관리자 API를 사용할 수 있습니다. `ADMIN_SECRET`은 발급된 관리자 세션 토큰 서명에 사용되며, 기존 호환을 위해 `ADMIN_PASSWORD`가 없을 때만 비밀번호 대체값으로 사용됩니다. Supabase Auth 기반 권한 분리도 포함되어 있어, Bearer 토큰이 있는 경우 `users.role = 'admin'` 계정을 관리자 요청으로 처리합니다.
 
 FAQ는 `/admin/faqs`에서 추가, 수정, 숨김, 삭제할 수 있습니다. 공개 FAQ 페이지는 `/faq`입니다.
 
@@ -80,6 +94,8 @@ AI 후기 생성은 다음 입력값을 사용합니다.
 5. Deploy를 누릅니다.
 6. 배포 URL을 `NEXT_PUBLIC_SITE_URL`에 다시 넣고 재배포하면 canonical, sitemap, OpenGraph URL이 정확해집니다.
 
+`main` 브랜치에 push하면 Vercel이 자동으로 운영 사이트를 다시 배포합니다.
+
 ## SEO/AEO/GEO 체크
 
 - `/sitemap.xml` 자동 생성
@@ -99,4 +115,4 @@ AI 후기 생성은 다음 입력값을 사용합니다.
 - 실제 요금 안내 정책
 - 개인정보 처리방침/이용약관 페이지
 - 네이버/구글 서치콘솔 인증값
-- Supabase 관리자 계정과 `ADMIN_SECRET`
+- Supabase 관리자 계정, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SECRET`
