@@ -53,13 +53,6 @@ export function Header() {
       {open ? (
         <div className="border-t bg-background lg:hidden">
           <nav className="mx-auto grid max-w-6xl grid-cols-2 gap-2 p-4">
-            <Link
-              href="/admin"
-              className="rounded-lg border bg-card px-4 py-4 text-sm font-semibold"
-              onClick={() => setOpen(false)}
-            >
-              관리자 모드
-            </Link>
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -70,6 +63,13 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <Link
+              href="/admin"
+              className="rounded-lg border bg-card px-4 py-4 text-sm font-semibold"
+              onClick={() => setOpen(false)}
+            >
+              관리자 모드
+            </Link>
           </nav>
         </div>
       ) : null}
