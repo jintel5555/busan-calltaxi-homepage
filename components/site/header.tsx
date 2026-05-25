@@ -23,6 +23,8 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
+              target={item.href.startsWith("http") ? "_blank" : undefined}
+              rel={item.href.startsWith("http") ? "noreferrer" : undefined}
               className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
             >
               {item.label}
@@ -57,6 +59,8 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
                 className="rounded-lg border bg-card px-4 py-4 text-sm font-semibold"
                 onClick={() => setOpen(false)}
               >
