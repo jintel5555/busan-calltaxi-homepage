@@ -76,12 +76,16 @@ export default async function HomePage() {
                   <Phone /> 전화문의
                 </a>
               </Button>
-              <Button asChild size="xl" className="bg-white text-black hover:bg-white/90">
+              <Button asChild size="xl" className="bg-[#03C75A] text-white hover:bg-[#03C75A]/90">
                 <a href="https://blog.naver.com/ceorang/224271695688" target="_blank" rel="noreferrer">
                   <NotebookText /> 네이버블로그
                 </a>
               </Button>
-              <Button asChild size="xl" className="bg-white text-black hover:bg-white/90">
+              <Button
+                asChild
+                size="xl"
+                className="bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#FCAF45] text-white hover:opacity-90"
+              >
                 <a href="https://www.instagram.com/raontaxi" target="_blank" rel="noreferrer">
                   <Camera /> 인스타그램
                 </a>
