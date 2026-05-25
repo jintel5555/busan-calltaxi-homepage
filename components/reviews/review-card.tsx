@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Review } from "@/lib/types";
@@ -38,12 +38,6 @@ export function ReviewCard({ review }: { review: Review }) {
               #{tag}
             </Badge>
           ))}
-          {review.ai_generated ? (
-            <Badge variant="outline">
-              <Sparkles className="mr-1 size-3" />
-              관리자 작성
-            </Badge>
-          ) : null}
         </div>
         <div className="border-t pt-4 text-xs text-muted-foreground">
           {review.author} · {formatKoreanDate(review.created_at)}
