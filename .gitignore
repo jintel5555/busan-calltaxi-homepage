@@ -9,6 +9,8 @@ dist
 *.err
 .github-deploy-key
 .github-deploy-key.pub
+.github-deploy-key-admin
+.github-deploy-key-admin.pub
 vite-dev.out
 vite-dev.err
 vercel.json
