@@ -12,7 +12,7 @@ import type { Review } from "@/lib/types";
 
 export function ReviewWriteForm({ onCreated }: { onCreated?: (review: Review) => void }) {
   const [rating, setRating] = useState(5);
-  const [tags, setTags] = useState<string[]>(["지역"]);
+  const [tags, setTags] = useState<string[]>(["부산역"]);
   const [pending, setPending] = useState(false);
 
   function toggleTag(tag: string) {
@@ -46,7 +46,7 @@ export function ReviewWriteForm({ onCreated }: { onCreated?: (review: Review) =>
       toast.success("후기가 등록되었습니다.");
       form.reset();
       setRating(5);
-      setTags(["지역"]);
+      setTags(["부산역"]);
       onCreated?.(result.review as Review);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.");
