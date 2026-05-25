@@ -36,7 +36,13 @@ export function Footer() {
 
         <nav className="grid grid-cols-2 gap-2 text-sm">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-lg px-3 py-2 text-[#d8cfbd] hover:bg-white/10">
+            <Link
+              key={item.href}
+              href={item.href}
+              target={item.href.startsWith("http") ? "_blank" : undefined}
+              rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              className="rounded-lg px-3 py-2 text-[#d8cfbd] hover:bg-white/10"
+            >
               {item.label}
             </Link>
           ))}
