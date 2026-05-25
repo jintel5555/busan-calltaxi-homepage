@@ -12,11 +12,13 @@ import {
   Send,
   ShieldCheck
 } from "lucide-react";
+import { HomeFaqPreview } from "@/components/home/home-faq-preview";
 import { HomeReviewShowcase } from "@/components/home/home-review-showcase";
 import { LiveInquiryStrip } from "@/components/home/live-inquiry-strip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getPublishedFaqs } from "@/lib/faqs";
 import { getPublishedReviews } from "@/lib/reviews";
 import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -43,8 +45,11 @@ const services = [
   }
 ];
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const reviews = await getPublishedReviews(24);
+  const faqs = await getPublishedFaqs();
 
   return (
     <>
@@ -164,6 +169,9 @@ export default async function HomePage() {
           })}
         </div>
       </section>
+
+      <HomeFaqPreview faqs={faqs} />
+
     </>
   );
 }
