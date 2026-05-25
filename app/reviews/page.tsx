@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "장거리전문부산콜택시를 직접 이용한 손님들의 실제 후기입니다."
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ReviewsPage() {
   const reviews = await getPublishedReviews(300);
 
