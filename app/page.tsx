@@ -4,6 +4,8 @@ import {
   BadgeCheck,
   Camera,
   CarFront,
+  Clock3,
+  Luggage,
   MapPinned,
   MessageCircle,
   NotebookText,
@@ -157,9 +159,9 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-6xl gap-4 px-4 md:grid-cols-4">
           {[
             {
-              icon: MapPinned,
-              title: "부산 관광택시",
-              text: "해운대, 광안리, 송도, 기장 등 부산 관광 코스를 편하게 이동할 수 있도록 안내합니다."
+              icon: Clock3,
+              title: "24시간 상담",
+              text: "새벽 출발, 심야 도착 등 시간대 관계없이 편하게 상담 가능합니다."
             },
             {
               icon: ShieldCheck,
@@ -172,9 +174,9 @@ export default async function HomePage() {
               text: "부담 없는 분위기와 편안한 응대로 처음 이용하는 분들도 편하게 이동합니다."
             },
             {
-              icon: CarFront,
-              title: "장거리 이동 전문",
-              text: "공항 픽업부터 출장, 병원 이동, 전국 장거리 일정까지 상담 가능합니다."
+              icon: Luggage,
+              title: "짐 많은 이동",
+              text: "캐리어, 골프백, 가족 짐 등 짐이 많은 일정도 편하게 이동할 수 있도록 안내합니다."
             }
           ].map((item) => {
             const Icon = item.icon;
