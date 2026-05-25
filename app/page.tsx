@@ -12,8 +12,8 @@ import {
   Send,
   ShieldCheck
 } from "lucide-react";
+import { HomeReviewShowcase } from "@/components/home/home-review-showcase";
 import { LiveInquiryStrip } from "@/components/home/live-inquiry-strip";
-import { ReviewCard } from "@/components/reviews/review-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,7 +44,7 @@ const services = [
 ];
 
 export default async function HomePage() {
-  const reviews = await getPublishedReviews(6);
+  const reviews = await getPublishedReviews(24);
 
   return (
     <>
@@ -92,6 +92,8 @@ export default async function HomePage() {
       </section>
 
       <LiveInquiryStrip />
+
+      <HomeReviewShowcase reviews={reviews} />
 
       <section className="bg-background py-14">
         <div className="mx-auto max-w-6xl px-4">
@@ -161,25 +163,6 @@ export default async function HomePage() {
               </div>
             );
           })}
-        </div>
-      </section>
-
-      <section className="py-14">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-8 flex items-end justify-between gap-4">
-            <div>
-              <p className="font-bold text-muted-foreground">Review Board</p>
-              <h2 className="mt-2 text-3xl font-black">실제 이용 후기 모음</h2>
-            </div>
-            <Button asChild variant="outline">
-              <Link href="/reviews">전체 후기</Link>
-            </Button>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
-            ))}
-          </div>
         </div>
       </section>
     </>
