@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CalendarDays, Sparkles } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import { JsonLd } from "@/components/json-ld";
 import { ReviewEngagement } from "@/components/reviews/review-engagement";
 import { Stars } from "@/components/reviews/review-card";
@@ -79,11 +79,6 @@ export default async function ReviewDetailPage({ params }: PageProps) {
             <span className="inline-flex items-center gap-1">
               <CalendarDays className="size-4" /> {formatKoreanDate(review.created_at)}
             </span>
-            {review.ai_generated ? (
-              <span className="inline-flex items-center gap-1">
-                <Sparkles className="size-4" /> 관리자 작성
-              </span>
-            ) : null}
           </div>
         </div>
       </article>
