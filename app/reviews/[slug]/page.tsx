@@ -5,7 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { ReviewEngagement } from "@/components/reviews/review-engagement";
 import { Stars } from "@/components/reviews/review-card";
 import { Badge } from "@/components/ui/badge";
-import { getComments, getPublishedReviews, getReviewBySlug } from "@/lib/reviews";
+import { getComments, getReviewBySlug } from "@/lib/reviews";
 import { absoluteUrl, reviewSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import { createReviewSlug, excerpt, formatKoreanDate } from "@/lib/utils";
@@ -14,10 +14,8 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
-  const reviews = await getPublishedReviews(20);
-  return reviews.map((review) => ({ slug: createReviewSlug(review) }));
-}
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;

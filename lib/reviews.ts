@@ -57,10 +57,30 @@ export async function getAllReviewsForAdmin(limit = 80): Promise<Review[]> {
 }
 
 export async function getReviewBySlug(slug: string): Promise<Review | null> {
+  const normalizedSlug = decodeURIComponent(slug);
+
+  if (hasSupabaseAdminEnv()) {
+    const id = normalizedSlug.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)?.[0];
+
+    if (id) {
+      const supabase = createSupabaseAdminClient();
+      const { data } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("id", id)
+        .eq("hidden", false)
+        .maybeSingle();
+
+      if (data) {
+        return normalizeReview(data as DbReview);
+      }
+    }
+  }
+
   const reviews = await getPublishedReviews(100);
   return (
-    reviews.find((review) => createReviewSlug(review) === slug) ||
-    reviews.find((review) => slug.endsWith(review.id)) ||
+    reviews.find((review) => createReviewSlug(review) === normalizedSlug) ||
+    reviews.find((review) => normalizedSlug.endsWith(review.id)) ||
     null
   );
 }
