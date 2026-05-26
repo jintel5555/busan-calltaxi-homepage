@@ -34,6 +34,19 @@ const situations = [
   "부산 관광 코스를 여유 있게 둘러보는 일정"
 ];
 
+const authorNicknames = [
+  "부산 장거리 이용객",
+  "해운대 출발 이용객",
+  "부산역 출발 손님",
+  "부모님 동행 이용객",
+  "새벽 이동 손님",
+  "관광택시 이용객",
+  "출장 이동 손님",
+  "기장 관광 이용객",
+  "광안리 출발 손님",
+  "가족 이동 이용객"
+];
+
 function randomItem<T>(items: T[]) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -115,7 +128,7 @@ export async function POST(request: Request) {
   const { data: lastAutoReview } = await supabase
     .from("reviews")
     .select("created_at")
-    .eq("author", "AI 자동 운행 사례")
+    .contains("tags", ["자동생성"])
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -137,6 +150,8 @@ export async function POST(request: Request) {
   const content = sanitizeMultiline(await generateContent(scenario), 900);
   const titlePrefix = scenario.tags.includes("관광") ? "부산 관광택시" : "부산 출발 장거리";
   const title = sanitizeText(`${titlePrefix} ${scenario.to} 이동 후기`, 90);
+  const tags = Array.from(new Set(scenario.tags)).map((tag) => sanitizeText(tag, 16));
+  const author = sanitizeText(randomItem(authorNicknames), 32);
 
   const { data, error } = await supabase
     .from("reviews")
@@ -145,8 +160,8 @@ export async function POST(request: Request) {
       content,
       rating: 5,
       images: [],
-      tags: scenario.tags.map((tag) => sanitizeText(tag, 16)),
-      author: "AI 자동 운행 사례",
+      tags,
+      author,
       ai_generated: true,
       featured: false,
       hidden: false
