@@ -34,7 +34,7 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
 
-  const visibleReviews = useMemo(() => localReviews.slice(0, 20), [localReviews]);
+  const visibleReviews = useMemo(() => localReviews, [localReviews]);
 
   function headers() {
     const result: Record<string, string> = {

@@ -3,6 +3,9 @@ import { FaqAdmin } from "@/components/admin/faq-admin";
 import { PageHero } from "@/components/sections/page-hero";
 import { getAllFaqsForAdmin } from "@/lib/faqs";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "FAQ 관리",
   robots: {

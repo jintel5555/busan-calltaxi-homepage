@@ -3,6 +3,9 @@ import { AdminDashboard } from "@/components/admin/admin-dashboard";
 import { PageHero } from "@/components/sections/page-hero";
 import { getAllReviewsForAdmin } from "@/lib/reviews";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "관리자",
   robots: {
