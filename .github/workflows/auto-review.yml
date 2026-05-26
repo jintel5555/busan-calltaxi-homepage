@@ -1,0 +1,16 @@
+name: Auto Review
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  create-auto-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call auto review endpoint
+        run: |
+          curl -fsS -X POST \
+            -H "x-auto-review-secret: ${{ secrets.AUTO_REVIEW_SECRET }}" \
+            https://busan-calltaxi-homepage.vercel.app/api/cron/auto-review
