@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { isAdminRequest } from "@/lib/auth";
 import { sanitizeMultiline, sanitizeText } from "@/lib/security";
 import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase";
 
@@ -116,7 +117,11 @@ function getSecret(request: Request) {
 
 export async function POST(request: Request) {
   const expectedSecret = process.env.AUTO_REVIEW_SECRET;
-  if (!expectedSecret || getSecret(request) !== expectedSecret) {
+  const hasCronSecret = Boolean(expectedSecret && getSecret(request) === expectedSecret);
+  const hasAdminSession = await isAdminRequest(request);
+  const forceCreate = hasAdminSession && request.headers.get("x-auto-review-force") === "1";
+
+  if (!hasCronSecret && !hasAdminSession) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -137,7 +142,7 @@ export async function POST(request: Request) {
   const lastCreatedAt = lastAutoReview?.created_at ? new Date(lastAutoReview.created_at).getTime() : 0;
   const elapsedMinutes = lastCreatedAt ? (Date.now() - lastCreatedAt) / 60_000 : Number.POSITIVE_INFINITY;
 
-  if (elapsedMinutes < randomGapMinutes) {
+  if (!forceCreate && elapsedMinutes < randomGapMinutes) {
     return NextResponse.json({
       skipped: true,
       reason: "waiting_for_random_interval",

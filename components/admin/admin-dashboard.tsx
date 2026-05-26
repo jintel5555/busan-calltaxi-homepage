@@ -170,6 +170,31 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
     }
   }
 
+  async function createAutoReviewNow() {
+    setPending("auto-review");
+    try {
+      const response = await fetch("/api/cron/auto-review", {
+        method: "POST",
+        headers: {
+          ...headers(),
+          "x-auto-review-force": "1"
+        }
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(result?.error || "자동 후기 생성에 실패했습니다.");
+      if (result?.review) {
+        setLocalReviews((current) => [result.review, ...current]);
+        toast.success("자동 후기를 1건 생성했습니다.");
+      } else {
+        toast.message("아직 생성 조건이 되지 않았습니다.");
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.");
+    } finally {
+      setPending(null);
+    }
+  }
+
   return (
     <AdminLoginCard>
     <div className="space-y-8">
@@ -178,6 +203,11 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
           <h2 className="text-xl font-black">관리자 메뉴</h2>
           <Button asChild type="button" variant="outline">
             <Link href="/admin/faqs">FAQ 관리 페이지</Link>
+          </Button>
+        </div>
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row">
+          <Button type="button" variant="accent" onClick={createAutoReviewNow} disabled={pending === "auto-review"}>
+            <Bot /> {pending === "auto-review" ? "생성 중" : "자동 후기 즉시 생성"}
           </Button>
         </div>
         <div className="grid gap-3">
