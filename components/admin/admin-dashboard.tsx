@@ -46,6 +46,15 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
     return result;
   }
 
+  function handleUnauthorized(response: Response) {
+    if (response.status !== 401) return false;
+
+    clearAdminSession();
+    toast.error("관리자 로그인이 만료되었습니다. 다시 로그인해주세요.");
+    window.setTimeout(() => window.location.reload(), 800);
+    return true;
+  }
+
   async function generateAiReview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -59,6 +68,7 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         body: JSON.stringify(payload)
       });
       const result = await response.json().catch(() => null);
+      if (handleUnauthorized(response)) return;
       if (!response.ok) throw new Error(result?.error || "AI 후기 생성에 실패했습니다.");
       setDraft(result.content);
       setDraftTitle(`${formData.get("from")} → ${formData.get("to")} 이동 후기`);
@@ -89,6 +99,7 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         })
       });
       const result = await response.json().catch(() => null);
+      if (handleUnauthorized(response)) return;
       if (!response.ok) throw new Error(result?.error || "후기 등록에 실패했습니다.");
       setLocalReviews((current) => [result.review, ...current]);
       setDraft("");
@@ -109,6 +120,7 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         body: JSON.stringify(patch)
       });
       const result = await response.json().catch(() => null);
+      if (handleUnauthorized(response)) return;
       if (!response.ok) throw new Error(result?.error || "수정에 실패했습니다.");
       setLocalReviews((current) => current.map((item) => (item.id === review.id ? result.review : item)));
       toast.success("수정되었습니다.");
@@ -134,6 +146,7 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         headers: headers()
       });
       const result = await response.json().catch(() => null);
+      if (handleUnauthorized(response)) return;
       if (!response.ok) throw new Error(result?.error || "삭제에 실패했습니다.");
       setLocalReviews((current) => current.filter((item) => item.id !== review.id));
       toast.success("삭제되었습니다.");
@@ -160,6 +173,7 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         })
       });
       const result = await response.json().catch(() => null);
+      if (handleUnauthorized(response)) return;
       if (!response.ok) throw new Error(result?.error || "공지 등록에 실패했습니다.");
       form.reset();
       toast.success("공지 등록이 완료되었습니다.");
@@ -181,12 +195,7 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         }
       });
       const result = await response.json().catch(() => null);
-      if (response.status === 401) {
-        clearAdminSession();
-        toast.error("관리자 로그인이 만료되었습니다. 다시 로그인해주세요.");
-        window.setTimeout(() => window.location.reload(), 800);
-        return;
-      }
+      if (handleUnauthorized(response)) return;
       if (!response.ok) throw new Error(result?.error || "자동 후기 생성에 실패했습니다.");
       if (result?.review) {
         setLocalReviews((current) => [result.review, ...current]);
