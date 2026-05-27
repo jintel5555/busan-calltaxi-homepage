@@ -9,20 +9,46 @@ import { Input } from "@/components/ui/input";
 const sessionKey = "busan_admin_session_token";
 const usernameKey = "busan_admin_username";
 
+function isSessionTokenFresh(token: string) {
+  const [payload] = token.split(".");
+  if (!payload) return false;
+
+  try {
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
+    const data = JSON.parse(atob(padded)) as { expiresAt?: number };
+    return Boolean(data.expiresAt && data.expiresAt > Date.now());
+  } catch {
+    return false;
+  }
+}
+
+export function clearAdminSession() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(sessionKey);
+  localStorage.removeItem(usernameKey);
+}
+
 export function getAdminSessionToken() {
   if (typeof window === "undefined") return "";
-  return localStorage.getItem(sessionKey) || "";
+  const token = localStorage.getItem(sessionKey) || "";
+  if (!token) return "";
+  if (isSessionTokenFresh(token)) return token;
+  clearAdminSession();
+  return "";
+}
+
+function getSavedAdminUser() {
+  if (typeof window === "undefined") return "";
+  const token = getAdminSessionToken();
+  const savedUsername = localStorage.getItem(usernameKey);
+  return token && savedUsername ? savedUsername : "";
 }
 
 export function AdminLoginCard({ children }: { children: ReactNode }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [sessionUser, setSessionUser] = useState(() => {
-    if (typeof window === "undefined") return "";
-    const token = localStorage.getItem(sessionKey);
-    const savedUsername = localStorage.getItem(usernameKey);
-    return token && savedUsername ? savedUsername : "";
-  });
+  const [sessionUser, setSessionUser] = useState(getSavedAdminUser);
   const [pending, setPending] = useState(false);
 
   async function signIn(event: FormEvent<HTMLFormElement>) {
@@ -51,8 +77,7 @@ export function AdminLoginCard({ children }: { children: ReactNode }) {
   }
 
   function signOut() {
-    localStorage.removeItem(sessionKey);
-    localStorage.removeItem(usernameKey);
+    clearAdminSession();
     setSessionUser("");
     toast.success("로그아웃했습니다.");
   }

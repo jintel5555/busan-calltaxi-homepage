@@ -4,7 +4,7 @@ import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
 import { Bot, EyeOff, Medal, Pencil, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { AdminLoginCard, getAdminSessionToken } from "@/components/admin/admin-login-card";
+import { AdminLoginCard, clearAdminSession, getAdminSessionToken } from "@/components/admin/admin-login-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -181,6 +181,12 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
         }
       });
       const result = await response.json().catch(() => null);
+      if (response.status === 401) {
+        clearAdminSession();
+        toast.error("관리자 로그인이 만료되었습니다. 다시 로그인해주세요.");
+        window.setTimeout(() => window.location.reload(), 800);
+        return;
+      }
       if (!response.ok) throw new Error(result?.error || "자동 후기 생성에 실패했습니다.");
       if (result?.review) {
         setLocalReviews((current) => [result.review, ...current]);
