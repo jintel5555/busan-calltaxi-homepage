@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
   const reviewRoutes = reviews.map((review) => ({
-    url: `${siteConfig.url}/reviews/${createReviewSlug(review)}`,
+    url: encodeURI(`${siteConfig.url}/reviews/${createReviewSlug(review)}`),
     lastModified: new Date(review.updated_at || review.created_at),
     changeFrequency: "weekly" as const,
     priority: review.featured ? 0.9 : 0.72
