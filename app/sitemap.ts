@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { busanTourTaxiPages } from "@/lib/busan-tour-taxi-pages";
 import { longDistanceTaxiPages } from "@/lib/long-distance-taxi-pages";
 import { getPublishedReviews } from "@/lib/reviews";
 import { navItems, siteConfig } from "@/lib/site";
@@ -31,5 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.84
   }));
 
-  return [...staticRoutes, ...longDistanceRoutes, ...reviewRoutes];
+  const busanTourTaxiRoutes = busanTourTaxiPages.map((page) => ({
+    url: `${siteConfig.url}/busan-tour-taxi/${page.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.84
+  }));
+
+  return [...staticRoutes, ...longDistanceRoutes, ...busanTourTaxiRoutes, ...reviewRoutes];
 }

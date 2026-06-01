@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Camera, CarFront, CheckCircle2, Clock3, MapPinned, Moon, Users } from "lucide-react";
 import { PageHero } from "@/components/sections/page-hero";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { busanTourTaxiCategories, busanTourTaxiPages } from "@/lib/busan-tour-taxi-pages";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -58,6 +61,11 @@ const popularCourses = [
 ];
 
 const infoChips = ["출발 위치", "관광 희망지", "인원수", "이동 시간", "캐리어 여부"];
+
+const groupedTourPages = busanTourTaxiCategories.map((category) => ({
+  category,
+  pages: busanTourTaxiPages.filter((page) => page.category === category)
+}));
 
 export default function BusanTourTaxiPage() {
   return (
@@ -129,6 +137,42 @@ export default function BusanTourTaxiPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="leading-7 text-muted-foreground">{course.text}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-muted/45 py-12">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-6">
+            <p className="font-bold text-accent-foreground dark:text-accent">Tour Guide</p>
+            <h2 className="mt-3 text-3xl font-black md:text-4xl">부산 관광택시 상세 코스 안내</h2>
+            <p className="mt-4 max-w-3xl leading-8 text-muted-foreground">
+              해운대, 광안리, 감천문화마을, 김해공항 픽업, 부산 출발 근교 관광까지 실제 예약 상담에 많이 나오는
+              코스를 상세 페이지로 확인할 수 있습니다.
+            </p>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {groupedTourPages.map((group) => (
+              <Card key={group.category}>
+                <CardHeader>
+                  <Badge className="w-fit bg-[#f4c74d] text-[#171306]">{group.category}</Badge>
+                  <CardTitle className="text-2xl font-black">{group.category} 상세 안내</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {group.pages.map((page) => (
+                      <Link
+                        key={page.slug}
+                        href={`/busan-tour-taxi/${page.slug}`}
+                        className="rounded-lg border bg-background px-4 py-3 text-sm font-bold transition hover:-translate-y-0.5 hover:border-accent hover:text-accent-foreground"
+                      >
+                        {page.mainKeyword}
+                      </Link>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             ))}
