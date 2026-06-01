@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [
         {
           url: siteConfig.image,
-          width: 1024,
-          height: 768,
+          width: 1200,
+          height: 630,
           alt: review.title
         }
       ]

@@ -36,12 +36,12 @@ export const metadata: Metadata = {
     title: `${siteConfig.name} | 부산 장거리택시·김해공항·부산관광`,
     description: siteConfig.description,
     images: [
-      {
-        url: siteConfig.image,
-        width: 1024,
-        height: 768,
-        alt: "부산 광안대교 야경 도로"
-      }
+        {
+          url: siteConfig.image,
+          width: 1200,
+          height: 630,
+          alt: "장거리전문부산콜택시 대표 이미지"
+        }
     ]
   },
   twitter: {

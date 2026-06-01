@@ -1,7 +1,9 @@
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://busan-calltaxi-homepage.vercel.app";
+
 export const siteConfig = {
   name: "장거리전문부산콜택시",
   shortName: "부산콜택시",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://busan-calltaxi-homepage.vercel.app",
+  url: siteUrl,
   description:
     "부산 장거리택시, 김해공항 픽업, 부산관광택시, 기사 포함 VIP 이동 예약을 지원하는 모바일 후기 플랫폼입니다.",
   phoneDisplay: "0507-1333-7114",
@@ -11,10 +13,8 @@ export const siteConfig = {
   kakaoChatUrl: "https://pf.kakao.com/_QRGwn/chat",
   naverTalkUrl: "https://talk.naver.com/ct/ww4d5rr",
   address: "부산광역시 전 지역 배차",
-  image:
-    "https://upload.wikimedia.org/wikipedia/commons/1/1c/Gwangan_Bridge_at_Night%2C_Busan.jpg",
-  imageCredit:
-    "Gwangan Bridge at Night, Busan by Ken Eckert, CC BY-SA 4.0, Wikimedia Commons"
+  image: `${siteUrl}/og-image.png`,
+  imageCredit: "장거리전문부산콜택시 대표 공유 이미지"
 };
 
 export const seoKeywords = [
