@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   BriefcaseBusiness,
   CarFront,
@@ -15,6 +16,7 @@ import { PageHero } from "@/components/sections/page-hero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { longDistanceRegionGroups, longDistanceTaxiPages } from "@/lib/long-distance-taxi-pages";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -78,6 +80,11 @@ const drivingStandards = [
 ];
 
 const infoChips = ["출발 위치", "목적지", "출발 시간", "인원수", "캐리어 여부"];
+
+const groupedPages = longDistanceRegionGroups.map((group) => ({
+  group,
+  pages: longDistanceTaxiPages.filter((page) => page.regionGroup === group)
+}));
 
 export default function LongDistanceTaxiPage() {
   return (
@@ -161,6 +168,44 @@ export default function LongDistanceTaxiPage() {
                 </Card>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-muted/45 py-12">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-8">
+            <p className="font-bold text-accent-foreground dark:text-accent">Area Guide</p>
+            <h2 className="mt-3 text-3xl font-black md:text-4xl">부산 출발 전국 장거리 콜택시 지역별 안내</h2>
+            <p className="mt-4 max-w-3xl leading-8 text-muted-foreground">
+              부산에서 출발해 서울, 인천공항, 대전, 대구, 울산, 창원, 진주, 거제, 통영, 포항, 경주, 광주, 여수,
+              강릉 등 주요 지역으로 이동하는 장거리 콜택시 안내 페이지입니다.
+            </p>
+          </div>
+          <div className="space-y-6">
+            {groupedPages.map(({ group, pages }) => (
+              <div key={group} className="rounded-lg border bg-card p-5">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <h3 className="text-xl font-black">{group}</h3>
+                  <Badge variant="secondary">{pages.length}개 지역</Badge>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {pages.map((page) => (
+                    <Link
+                      key={page.slug}
+                      href={`/long-distance-taxi/${page.slug}`}
+                      className="rounded-lg border bg-background p-4 transition hover:-translate-y-0.5 hover:border-accent"
+                    >
+                      <p className="text-sm font-bold text-accent-foreground dark:text-accent">{page.regionGroup}</p>
+                      <h4 className="mt-2 font-black">{page.mainKeyword}</h4>
+                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
+                        부산 출발 {page.destination} 장거리택시 예약 상담 안내
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

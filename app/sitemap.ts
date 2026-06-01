@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { longDistanceTaxiPages } from "@/lib/long-distance-taxi-pages";
 import { getPublishedReviews } from "@/lib/reviews";
 import { navItems, siteConfig } from "@/lib/site";
 import { createReviewSlug } from "@/lib/utils";
@@ -23,5 +24,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: review.featured ? 0.9 : 0.72
   }));
 
-  return [...staticRoutes, ...reviewRoutes];
+  const longDistanceRoutes = longDistanceTaxiPages.map((page) => ({
+    url: `${siteConfig.url}/long-distance-taxi/${page.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.84
+  }));
+
+  return [...staticRoutes, ...longDistanceRoutes, ...reviewRoutes];
 }
