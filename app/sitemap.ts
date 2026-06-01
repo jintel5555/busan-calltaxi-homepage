@@ -4,7 +4,7 @@ import { navItems, siteConfig } from "@/lib/site";
 import { createReviewSlug } from "@/lib/utils";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const reviews = await getPublishedReviews(100);
+  const reviews = await getPublishedReviews(500);
   const now = new Date();
 
   const staticRoutes = navItems
