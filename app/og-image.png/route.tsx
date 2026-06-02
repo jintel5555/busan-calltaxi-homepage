@@ -5,8 +5,8 @@ export const runtime = "edge";
 
 export const alt = "장거리전문부산콜택시 대표 이미지";
 export const size = {
-  width: 1200,
-  height: 630
+  width: 800,
+  height: 800
 };
 export const contentType = "image/png";
 
@@ -21,7 +21,7 @@ export function GET() {
           position: "relative",
           overflow: "hidden",
           background:
-            "linear-gradient(135deg, #050505 0%, #10100f 40%, #16110a 66%, #050505 100%)",
+            "linear-gradient(145deg, #050505 0%, #10100f 48%, #17120a 100%)",
           color: "#fff6e3",
           fontFamily: "Arial, sans-serif"
         }}
@@ -31,90 +31,109 @@ export function GET() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(circle at 78% 18%, rgba(244,199,77,0.35), transparent 24%), radial-gradient(circle at 18% 82%, rgba(32,215,197,0.2), transparent 28%)"
+              "radial-gradient(circle at 50% 18%, rgba(244,199,77,0.32), transparent 30%), radial-gradient(circle at 50% 88%, rgba(32,215,197,0.18), transparent 34%)"
           }}
         />
         <div
           style={{
             position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: 180,
+            inset: 38,
+            borderRadius: 56,
+            border: "4px solid rgba(244,199,77,0.42)",
             background:
-              "linear-gradient(180deg, transparent 0%, rgba(244,199,77,0.15) 48%, rgba(244,199,77,0.34) 100%)"
+              "linear-gradient(180deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.02) 100%)"
           }}
         />
         <div
           style={{
             position: "absolute",
-            right: 78,
-            bottom: 76,
-            width: 390,
-            height: 158,
-            borderRadius: 44,
-            background: "linear-gradient(135deg, #111 0%, #2c2a25 55%, #080808 100%)",
-            border: "5px solid rgba(244,199,77,0.8)",
-            boxShadow: "0 28px 80px rgba(0,0,0,0.55)",
-            display: "flex"
+            left: 225,
+            top: 92,
+            width: 350,
+            height: 350,
+            borderRadius: 999,
+            background: "linear-gradient(145deg, #f4c74d 0%, #ffdf75 52%, #9b7420 100%)",
+            boxShadow: "0 34px 100px rgba(244,199,77,0.22)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
           }}
         >
           <div
             style={{
               position: "absolute",
-              left: 74,
-              top: -58,
-              width: 230,
-              height: 92,
-              borderRadius: "100px 100px 18px 18px",
-              background: "linear-gradient(135deg, #1b1b1b, #3a3528)",
-              border: "5px solid rgba(244,199,77,0.72)"
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              left: 48,
-              bottom: -27,
-              width: 72,
-              height: 72,
+              inset: 18,
               borderRadius: 999,
-              background: "#050505",
-              border: "12px solid #f4c74d"
+              background: "#090909"
             }}
           />
           <div
             style={{
               position: "absolute",
-              right: 48,
-              bottom: -27,
-              width: 72,
-              height: 72,
+              left: 80,
+              top: 151,
+              width: 190,
+              height: 78,
+              borderRadius: 28,
+              background: "#f4c74d",
+              display: "flex"
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              left: 121,
+              top: 106,
+              width: 108,
+              height: 70,
+              borderRadius: "70px 70px 16px 16px",
+              background: "#f4c74d"
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              left: 105,
+              top: 210,
+              width: 42,
+              height: 42,
               borderRadius: 999,
-              background: "#050505",
-              border: "12px solid #f4c74d"
+              background: "#090909",
+              border: "10px solid #fff6e3"
             }}
           />
           <div
             style={{
               position: "absolute",
-              left: 36,
-              top: 56,
-              width: 64,
-              height: 28,
-              borderRadius: 16,
-              background: "#fff1b8"
+              left: 205,
+              top: 210,
+              width: 42,
+              height: 42,
+              borderRadius: 999,
+              background: "#090909",
+              border: "10px solid #fff6e3"
             }}
           />
           <div
             style={{
               position: "absolute",
-              right: 36,
-              top: 56,
-              width: 64,
-              height: 28,
-              borderRadius: 16,
-              background: "#fff1b8"
+              left: 97,
+              top: 166,
+              width: 56,
+              height: 24,
+              borderRadius: 12,
+              background: "#fff6e3"
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              right: 97,
+              top: 166,
+              width: 56,
+              height: 24,
+              borderRadius: 12,
+              background: "#fff6e3"
             }}
           />
         </div>
@@ -122,95 +141,57 @@ export function GET() {
           style={{
             position: "absolute",
             left: 72,
-            top: 70,
+            right: 72,
+            top: 472,
             display: "flex",
             flexDirection: "column",
-            gap: 22,
-            width: 710
+            alignItems: "center",
+            textAlign: "center",
+            gap: 16
           }}
         >
           <div
             style={{
               display: "flex",
-              width: "fit-content",
-              padding: "12px 22px",
+              padding: "10px 20px",
               borderRadius: 999,
               background: "#f4c74d",
               color: "#171306",
-              fontSize: 28,
+              fontSize: 24,
               fontWeight: 900
             }}
           >
-            부산 장거리 · 김해공항 · 부산관광 전문
+            부산 장거리 · 공항 · 관광 전문
           </div>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 8
+              fontSize: 48,
+              lineHeight: 1.12,
+              fontWeight: 900
             }}
           >
-            <div
-              style={{
-                fontSize: 78,
-                lineHeight: 1.03,
-                letterSpacing: -2,
-                fontWeight: 900
-              }}
-            >
-              {siteConfig.name}
-            </div>
-            <div
-              style={{
-                fontSize: 34,
-                lineHeight: 1.35,
-                color: "#ddd4c1",
-                fontWeight: 700
-              }}
-            >
-              공항 픽업부터 장거리 이동, 부산 관광택시까지 한 번에 예약 상담
-            </div>
+            {siteConfig.name}
           </div>
           <div
             style={{
-              display: "flex",
-              gap: 16,
-              marginTop: 8
+              fontSize: 28,
+              lineHeight: 1.35,
+              color: "#ddd4c1",
+              fontWeight: 800
             }}
           >
-            {["24시간 상담", "새벽 공항콜", "프리미엄 기사 서비스"].map((label) => (
-              <div
-                key={label}
-                style={{
-                  display: "flex",
-                  padding: "13px 18px",
-                  borderRadius: 16,
-                  border: "2px solid rgba(255,255,255,0.18)",
-                  background: "rgba(255,255,255,0.08)",
-                  fontSize: 26,
-                  fontWeight: 800
-                }}
-              >
-                {label}
-              </div>
-            ))}
+            김해공항 픽업 · 부산관광택시 · 장거리 이동
           </div>
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            left: 72,
-            bottom: 62,
-            display: "flex",
-            alignItems: "center",
-            gap: 18,
-            color: "#f4c74d",
-            fontSize: 42,
-            fontWeight: 900
-          }}
-        >
-          <span>{siteConfig.phoneDisplay}</span>
-          <span style={{ color: "#20d7c5", fontSize: 28 }}>카카오톡 · 네이버 톡톡 상담</span>
+          <div
+            style={{
+              marginTop: 8,
+              color: "#f4c74d",
+              fontSize: 38,
+              fontWeight: 900
+            }}
+          >
+            {siteConfig.phoneDisplay}
+          </div>
         </div>
       </div>
     ),

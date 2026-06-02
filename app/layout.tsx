@@ -38,8 +38,8 @@ export const metadata: Metadata = {
     images: [
         {
           url: siteConfig.image,
-          width: 1200,
-          height: 630,
+          width: 800,
+          height: 800,
           alt: "장거리전문부산콜택시 대표 이미지"
         }
     ]
