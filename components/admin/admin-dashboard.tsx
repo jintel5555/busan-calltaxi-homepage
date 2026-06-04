@@ -200,8 +200,13 @@ export function AdminDashboard({ reviews }: { reviews: Review[] }) {
       if (result?.review) {
         setLocalReviews((current) => [result.review, ...current]);
         toast.success("자동 후기를 1건 생성했습니다.");
+      } else if (result?.reason === "waiting_for_random_interval") {
+        const remaining = Math.max(1, Number(result.nextMinimumMinutes || 0) - Number(result.elapsedMinutes || 0));
+        toast.message(`자동 생성 주기 대기 중입니다. 약 ${remaining}분 후 다시 시도해 주세요.`);
+      } else if (result?.reason === "duplicate_guard") {
+        toast.message(result.message || "중복 방지 조건에 걸려 저장하지 않았습니다. 다시 한 번 눌러주세요.");
       } else {
-        toast.message("아직 생성 조건이 되지 않았습니다.");
+        toast.message(result?.message || "아직 생성 조건이 되지 않았습니다.");
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.");

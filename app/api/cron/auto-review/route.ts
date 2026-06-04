@@ -204,7 +204,20 @@ function localReview(scenario: Scenario) {
     `${scenario.from} 출발 시간이 이른 편이었는데 연락이 잘 돼서 불안하지 않았습니다. ${scenario.to} 일정도 늦지 않게 맞췄습니다.`,
     `${scenario.purpose} 일정이라 시간 맞추는 게 중요했는데 출발과 도착이 깔끔했습니다. 다음에도 장거리 이동이 있으면 참고하려고 합니다.`
   ];
-  return randomItem(templates);
+  const details = [
+    "예약 전 확인 연락이 와서 일정 맞추기가 수월했습니다.",
+    "출발 위치를 헷갈릴까 봐 걱정했는데 안내가 차분했습니다.",
+    "이동 중 차 안이 조용해서 잠깐 쉬기 좋았습니다.",
+    "도착지 근처에서 내리기 편한 곳으로 안내해주셨습니다.",
+    "짐이 있었는데 싣고 내리는 과정이 부담스럽지 않았습니다.",
+    "중간에 시간 여유를 확인해주셔서 일정이 급하지 않았습니다.",
+    "처음 가는 곳이라 걱정했는데 도착지 확인을 잘 해주셨습니다.",
+    "부모님과 같이 움직이는 일정이라 조용한 이동이 도움이 됐습니다.",
+    "비슷한 일정이 있으면 다시 상담해도 괜찮겠다고 느꼈습니다.",
+    "복잡한 환승 없이 바로 이동할 수 있어서 편했습니다."
+  ];
+
+  return `${randomItem(templates)} ${randomItem(details)}`;
 }
 
 async function generateContent(scenario: Scenario) {
@@ -357,11 +370,13 @@ export async function POST(request: Request) {
   let title = "";
   let content = "";
 
-  for (let attempt = 0; attempt < 10; attempt += 1) {
+  const maxAttempts = forceCreate ? 40 : 16;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     const nextScenario = createScenario();
     const routeWasRecentlyUsed = recentlyUsedRoute(nextScenario, reviewsForCompare);
 
-    if (routeWasRecentlyUsed && attempt < 6) {
+    if (routeWasRecentlyUsed && attempt < (forceCreate ? 10 : 6)) {
       continue;
     }
 
