@@ -143,6 +143,66 @@ const situations = [
   "여러 명이 함께 움직여 차량 공간이 중요한 상황"
 ];
 
+const timeWindows = [
+  "이른 아침 출발",
+  "오전 일정",
+  "점심 전 이동",
+  "오후 이동",
+  "저녁 도착",
+  "심야 귀가",
+  "비행기 시간에 맞춘 이동",
+  "KTX 도착 후 이동",
+  "호텔 체크아웃 후 이동",
+  "행사 종료 후 이동"
+];
+
+const weatherNotes = [
+  "날씨가 맑아 이동이 수월한 편",
+  "비가 조금 와서 승하차 위치가 중요했던 상황",
+  "바람이 있어 오래 걷기 애매했던 상황",
+  "날이 더워 차량 이동이 편했던 상황",
+  "날이 쌀쌀해 대기 시간을 줄이고 싶었던 상황",
+  "흐린 날이라 실내외 동선을 조정한 상황"
+];
+
+const luggageNotes = [
+  "캐리어 1개가 있었음",
+  "가방이 여러 개 있었음",
+  "짐은 거의 없었음",
+  "부모님 짐까지 함께 챙겨야 했음",
+  "아이 짐이 있어 트렁크 공간이 필요했음",
+  "선물 박스와 작은 짐이 있었음"
+];
+
+const companionNotes = [
+  "혼자 이용한 일정",
+  "부모님과 함께한 일정",
+  "가족이 같이 움직인 일정",
+  "아이와 함께한 일정",
+  "일행 두 명이 함께 탄 일정",
+  "출장 일행과 같이 이동한 일정",
+  "외지에서 온 가족을 모신 일정"
+];
+
+const pickupNotes = [
+  "건물 앞에서 바로 만나 출발",
+  "숙소 로비 근처에서 픽업",
+  "역 출구 쪽에서 만나 이동",
+  "공항 도착층에서 동선을 맞춤",
+  "복잡하지 않은 위치로 승차 지점을 조정",
+  "도착지 입구 가까운 곳에서 하차"
+];
+
+const routeNotes = [
+  "중간에 한 번 쉬어가서 부담이 덜했음",
+  "도로 상황을 보며 도착 시간을 맞춘 일정",
+  "식사 시간에 맞춰 동선을 조정한 일정",
+  "목적지 근처 길이 복잡해 하차 위치를 확인한 일정",
+  "예상보다 이동 시간이 길지 않았던 일정",
+  "환승 없이 바로 이동한 점이 편했던 일정",
+  "출발 전 연락이 되어 기다림이 길지 않았던 일정"
+];
+
 const authorNicknames = [
   "부산 장거리 이용객",
   "해운대 출발 이용객",
@@ -182,6 +242,12 @@ function createScenario() {
     customerType: randomItem(customerTypes),
     vehicleType: randomItem(["프리미엄 세단", "넓은 세단", "SUV", "승합 차량", "대형 세단", "VIP 차량"]),
     situation: randomItem(situations),
+    timeWindow: randomItem(timeWindows),
+    weatherNote: randomItem(weatherNotes),
+    luggageNote: randomItem(luggageNotes),
+    companionNote: randomItem(companionNotes),
+    pickupNote: randomItem(pickupNotes),
+    routeNote: randomItem(routeNotes),
     tags: [...route.tags, isTour ? "관광" : "장거리", "자동생성"]
   };
 }
@@ -216,11 +282,20 @@ function localReview(scenario: Scenario) {
     "비슷한 일정이 있으면 다시 상담해도 괜찮겠다고 느꼈습니다.",
     "복잡한 환승 없이 바로 이동할 수 있어서 편했습니다."
   ];
+  const contextLines = [
+    `${scenario.timeWindow}이었고 ${scenario.luggageNote}이라 차량으로 바로 이동한 점이 편했습니다.`,
+    `${scenario.companionNote}이라 동선이 신경 쓰였는데 ${scenario.pickupNote}이라 수월했습니다.`,
+    `${scenario.weatherNote}이었는데 ${scenario.routeNote}이라 일정 맞추기가 괜찮았습니다.`,
+    `${scenario.pickupNote}했고, ${scenario.routeNote}이라 전체적으로 무난했습니다.`,
+    `${scenario.luggageNote}이라 걱정했는데 승하차가 복잡하지 않았습니다.`,
+    `${scenario.timeWindow}이라 시간 맞추는 게 중요했는데 크게 불안하지 않았습니다.`
+  ];
 
-  return `${randomItem(templates)} ${randomItem(details)}`;
+  return `${randomItem(templates)} ${randomItem(contextLines)} ${randomItem(details)}`;
 }
 
-async function generateContent(scenario: Scenario) {
+async function generateContent(scenario: Scenario, preferLocal = false) {
+  if (preferLocal) return localReview(scenario);
   if (!process.env.OPENAI_API_KEY) return localReview(scenario);
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -242,6 +317,13 @@ async function generateContent(scenario: Scenario) {
 손님유형: ${scenario.customerType}
 차량종류: ${scenario.vehicleType}
 상황: ${scenario.situation}`
+        + `
+시간대: ${scenario.timeWindow}
+날씨/현장: ${scenario.weatherNote}
+짐: ${scenario.luggageNote}
+동행: ${scenario.companionNote}
+픽업/하차: ${scenario.pickupNote}
+동선 메모: ${scenario.routeNote}`
       }
     ],
     max_output_tokens: 220
@@ -283,11 +365,11 @@ function isDuplicateReview(candidate: { title: string; content: string }, existi
     if (!title && !content) return false;
 
     if (title === candidateTitle || content === candidateContent) return true;
-    if (candidateContent.length > 40 && content.length > 40 && tokenSimilarity(candidateContent, content) >= 0.72) {
+    if (candidateContent.length > 40 && content.length > 40 && tokenSimilarity(candidateContent, content) >= 0.88) {
       return true;
     }
 
-    return tokenSimilarity(candidateTitle, title) >= 0.9 && tokenSimilarity(candidateContent, content) >= 0.55;
+    return tokenSimilarity(candidateTitle, title) >= 0.94 && tokenSimilarity(candidateContent, content) >= 0.74;
   });
 }
 
@@ -370,7 +452,7 @@ export async function POST(request: Request) {
   let title = "";
   let content = "";
 
-  const maxAttempts = forceCreate ? 40 : 16;
+  const maxAttempts = forceCreate ? 90 : 28;
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     const nextScenario = createScenario();
@@ -381,7 +463,7 @@ export async function POST(request: Request) {
     }
 
     const nextTitle = createTitle(nextScenario);
-    const nextContent = sanitizeMultiline(await generateContent(nextScenario), 900);
+    const nextContent = sanitizeMultiline(await generateContent(nextScenario, attempt >= 14), 900);
 
     if (isDuplicateReview({ title: nextTitle, content: nextContent }, reviewsForCompare)) {
       continue;
