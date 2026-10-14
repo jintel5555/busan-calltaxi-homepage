@@ -95,7 +95,7 @@ export default function BusanTourTaxiPage() {
         </div>
         <div className="mx-auto mt-8 max-w-6xl px-4">
           <Button asChild size="xl" className="w-full md:w-auto">
-            <a href="/tour-courses">관광코스 보기</a>
+            <Link href="/tour-courses">관광코스 보기</Link>
           </Button>
         </div>
       </section>

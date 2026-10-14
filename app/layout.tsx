@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { FloatingActions } from "@/components/site/floating-actions";
-import { Footer } from "@/components/site/footer";
-import { Header } from "@/components/site/header";
+import { SiteShell } from "@/components/site/site-shell";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { JsonLd } from "@/components/json-ld";
 import { PwaRegister } from "@/app/pwa-register";
@@ -77,10 +75,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <JsonLd data={localBusinessSchema()} />
-          <Header />
-          <main className="bottom-safe">{children}</main>
-          <Footer />
-          <FloatingActions />
+          <SiteShell>{children}</SiteShell>
           <Toaster richColors position="top-center" />
           <PwaRegister />
         </ThemeProvider>

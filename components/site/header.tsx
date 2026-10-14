@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { navItems, siteConfig } from "@/lib/site";
 import { ThemeToggle } from "@/components/site/theme-toggle";
+import { LanguageSwitcher } from "@/components/site/language-switcher";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -33,6 +34,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-1">
+          <div className="hidden sm:block"><LanguageSwitcher /></div>
           <Button asChild aria-label="관리자 모드" variant="ghost" size="icon">
             <Link href="/admin">
               <ShieldCheck />
@@ -51,6 +53,8 @@ export function Header() {
           </Button>
         </div>
       </div>
+
+      <div className="border-t px-4 py-2 sm:hidden"><LanguageSwitcher /></div>
 
       {open ? (
         <div className="border-t bg-background lg:hidden">

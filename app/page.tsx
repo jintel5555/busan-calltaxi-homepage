@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { languageAlternates } from "@/lib/international";
 import {
   ArrowRight,
   BadgeCheck,
@@ -47,6 +49,10 @@ const services = [
 ];
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/", languages: languageAlternates }
+};
 
 export default async function HomePage() {
   const reviews = await getPublishedReviews(24);

@@ -1,4 +1,4 @@
-const CACHE_NAME = "busan-calltaxi-v2";
+const CACHE_NAME = "busan-calltaxi-v3";
 const PRECACHE_URLS = ["/icon.svg", "/maskable-icon.svg"];
 
 self.addEventListener("install", (event) => {

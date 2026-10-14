@@ -11,7 +11,22 @@
 - LocalBusiness, FAQ, Review schema, OpenGraph, sitemap.xml, robots.txt
 - PWA 설치 지원과 다크모드
 
-## 실행
+## 다국어 관광·공항 접송 페이지
+
+첫 홈 방문에서 한국어, 대만 번체 중국어, 일본어, 영어를 선택합니다. 선택은 브라우저에 저장되며, 다음에 홈 주소로 방문하면 선택한 언어로 연결됩니다. 상단 언어 메뉴로 언제든 변경할 수 있습니다. 국가 IP로 강제 이동하지 않고 방문자가 언어를 선택하는 방식입니다.
+
+- 한국어: `/` (기존 홈페이지)
+- 대만 번체 중국어: `/zh-tw`
+- 일본어: `/ja`
+- 영어: `/en`
+
+해외 페이지는 관광택시, 김해공항 픽업·샌딩, 예약상담, FAQ로 구성됩니다. WhatsApp과 LINE 문자 상담만 안내하며, Facebook·Instagram·Threads도 하단에 연결합니다. 한국 국내 연락처는 `0507-1333-7114`로 표기합니다.
+
+예약 양식은 메시지를 작성하는 도구입니다. WhatsApp 버튼은 작성된 내용을 담은 대화를 열고, LINE 버튼은 메시지를 복사합니다. 고객이 실제 메시지를 보내고 운영자와 일정·요금을 확인해야 예약이 완료됩니다. 이 양식은 서버나 Supabase에 개인정보를 저장하지 않습니다. 입력 날짜와 시간은 한국 시간 기준입니다.
+
+번역·상담 URL은 `lib/international.ts`, 해외 화면은 `app/[locale]/page.tsx`, 첫 방문 선택과 공통 화면 전환은 `components/site/language-entry.tsx`와 `site-shell.tsx`에서 관리합니다. 각 언어 페이지에 canonical, hreflang, 공유 메타데이터, Service·FAQ 구조화 데이터와 sitemap 연결이 적용됩니다.
+
+## 로컬 실행
 
 ```bash
 npm install
@@ -108,6 +123,8 @@ AI 후기 생성은 다음 입력값을 사용합니다.
 ## 이미지 출처
 
 히어로 배경은 Wikimedia Commons의 “Gwangan Bridge at Night, Busan” 이미지를 사용합니다. 저작자 Ken Eckert, 라이선스 CC BY-SA 4.0입니다.
+
+해외 페이지 배경은 같은 사진을 너비 1600px로 축소하고 WebP로 변환한 `public/busan-international.webp`입니다. 이 변환 이미지도 CC BY-SA 4.0이며, 해외 페이지 Footer에 원본과 라이선스 링크를 표기합니다.
 
 ## 운영 전 교체할 것
 

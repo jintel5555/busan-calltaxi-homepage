@@ -83,6 +83,15 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+.language-entry::backdrop {
+  backdrop-filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .soft-rise, .pulse-ring, .ticker { animation: none; }
+}
+
 body {
   min-height: 100vh;
   background: var(--background);
@@ -112,6 +121,12 @@ select {
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.78)),
     url("https://upload.wikimedia.org/wikipedia/commons/1/1c/Gwangan_Bridge_at_Night%2C_Busan.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.hero-international {
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.36)), url("/busan-international.webp");
   background-position: center;
   background-size: cover;
 }

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { internationalLocales, languageAlternates } from "@/lib/international";
 import { busanTourTaxiPages } from "@/lib/busan-tour-taxi-pages";
 import { longDistanceTaxiPages } from "@/lib/long-distance-taxi-pages";
 import { getPublishedReviews } from "@/lib/reviews";
@@ -15,7 +16,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteConfig.url}${item.href}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
-      priority: item.href === "/" ? 1 : 0.82
+      priority: item.href === "/" ? 1 : 0.82,
+      ...(item.href === "/" ? { alternates: { languages: languageAlternates } } : {})
     }));
 
   const reviewRoutes = reviews.map((review) => ({
@@ -39,5 +41,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.84
   }));
 
-  return [...staticRoutes, ...longDistanceRoutes, ...busanTourTaxiRoutes, ...reviewRoutes];
+  const internationalRoutes = internationalLocales.map((locale) => ({
+    url: `${siteConfig.url}/${locale}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.9,
+    alternates: { languages: languageAlternates }
+  }));
+
+  return [...staticRoutes, ...internationalRoutes, ...longDistanceRoutes, ...busanTourTaxiRoutes, ...reviewRoutes];
 }
