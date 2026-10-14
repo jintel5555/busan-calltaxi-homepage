@@ -16,6 +16,31 @@ async function checkOverflow(page) {
   assert(result.content <= result.width, `Horizontal overflow: ${JSON.stringify(result)} at ${page.url()}`);
 }
 
+async function checkContrast(page) {
+  const contrast = await page.evaluate(() => {
+    function luminance(color) {
+      const channels = color.match(/[\d.]+/g).slice(0, 3).map(Number).map((value) => {
+        const srgb = value / 255;
+        return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+      });
+      return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+    }
+    function ratio(color, background) {
+      const values = [luminance(color), luminance(background)].sort((a, b) => b - a);
+      return (values[0] + 0.05) / (values[1] + 0.05);
+    }
+    const hero = document.querySelector("main article > section");
+    const heading = document.querySelector("h1");
+    const panel = document.querySelector("form").parentElement;
+    const label = document.querySelector("form label");
+    return {
+      fallback: ratio(getComputedStyle(heading).color, getComputedStyle(hero).backgroundColor),
+      form: ratio(getComputedStyle(label).color, getComputedStyle(panel).backgroundColor)
+    };
+  });
+  assert(contrast.fallback >= 4.5 && contrast.form >= 4.5, `Insufficient contrast at ${page.url()}: ${JSON.stringify(contrast)}`);
+}
+
 async function run() {
   await fs.mkdir(screenshotDir, { recursive: true });
   const browser = await chromium.launch({ headless: true, channel: channelFlag >= 0 ? process.argv[channelFlag + 1] : undefined });
@@ -37,11 +62,20 @@ async function run() {
         assert((await page.locator('link[rel="canonical"]').getAttribute("href")).endsWith(pathname));
         assert.equal(await page.locator('link[rel="alternate"][hreflang]').count(), 5);
         await checkOverflow(page);
+        await checkContrast(page);
+        for (const img of await page.locator("main img").all()) {
+          await img.scrollIntoViewIfNeeded();
+          await img.evaluate((element) => element.decode());
+          assert(await img.evaluate((element) => element.naturalWidth > 0), "Image did not render");
+        }
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+        await page.screenshot({ path: path.join(screenshotDir, `${pathname.slice(1)}-${width}-top.png`) });
         await page.screenshot({ path: path.join(screenshotDir, `${pathname.slice(1)}-${width}.png`), fullPage: true });
         await page.locator("header button").click();
         await checkOverflow(page);
+        await checkContrast(page);
         await page.screenshot({ path: path.join(screenshotDir, `${pathname.slice(1)}-${width}-theme.png`) });
-        console.log(`PASS ${pathname} ${width}px: locale, contacts, navigation, metadata, layout, theme`);
+        console.log(`PASS ${pathname} ${width}px: locale, contacts, navigation, metadata, images, contrast, layout, theme`);
       }
       await context.close();
     }
@@ -68,6 +102,16 @@ async function run() {
     await page.goto(`${baseUrl}/admin`);
     assert.equal(await page.locator("dialog[open]").count(), 0);
     console.log("PASS first visit, saved preference, Korean return, admin access");
+
+    const fallbackContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    await fallbackContext.route("**/*.webp", (route) => route.abort());
+    const fallbackPage = await fallbackContext.newPage();
+    await fallbackPage.goto(`${baseUrl}/ja`);
+    assert.equal(await fallbackPage.locator("main img").first().evaluate((img) => img.naturalWidth), 0);
+    await checkContrast(fallbackPage);
+    await fallbackPage.screenshot({ path: path.join(screenshotDir, "missing-image-fallback.png") });
+    await fallbackContext.close();
+    console.log("PASS readable hero when image requests fail");
 
     await page.goto(`${baseUrl}/en`);
     await page.locator('[data-channel="line"]').click();
@@ -97,9 +141,11 @@ async function run() {
     assert.equal(sitemap.status(), 200);
     const xml = await sitemap.text();
     for (const pathname of Object.keys(locales)) assert(xml.includes(`${pathname}</loc>`));
-    const background = await context.request.get(`${baseUrl}/busan-international.webp`);
-    assert.equal(background.status(), 200);
-    assert(background.headers()["content-type"].includes("image/webp"));
+    for (const path of ["/busan-coast.webp", "/busan-gamcheon.webp", "/busan-night-view.webp"]) {
+      const background = await context.request.get(`${baseUrl}${path}`);
+      assert.equal(background.status(), 200);
+      assert(background.headers()["content-type"].includes("image/webp"));
+    }
     const missing = await context.request.get(`${baseUrl}/fr`);
     assert.equal(missing.status(), 404);
     assert.deepEqual(errors, [], "Browser runtime errors");

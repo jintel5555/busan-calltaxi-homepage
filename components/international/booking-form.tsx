@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { internationalContacts, internationalCopy, type InternationalLocale } from "@/lib/international";
+import styles from "./international.module.css";
 
 export function InternationalBookingForm({ locale }: { locale: InternationalLocale }) {
   const copy = internationalCopy[locale].booking;
@@ -73,7 +74,7 @@ export function InternationalBookingForm({ locale }: { locale: InternationalLoca
       </label>
       <p className="text-sm leading-6 text-muted-foreground">{copy.disclaimer}</p>
       <div className="grid gap-3 sm:grid-cols-2">
-        <Button type="submit" data-channel="whatsapp" size="lg" className="h-auto min-h-14 whitespace-normal bg-[#25d366] px-4 py-3 text-[#052610] hover:bg-[#20bf5c]"><MessageCircle />{copy.send}</Button>
+        <Button type="submit" data-channel="whatsapp" size="lg" className={`${styles.sendButton} h-auto min-h-14 whitespace-normal px-4 py-3`}><MessageCircle />{copy.send}</Button>
         <Button type="submit" data-channel="line" size="lg" variant="outline" className="h-auto min-h-14 whitespace-normal px-4 py-3"><Copy />{copy.copy}</Button>
       </div>
       <p role="status" aria-live="polite" className="text-sm font-semibold">{status}</p>

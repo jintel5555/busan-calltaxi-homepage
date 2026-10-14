@@ -1,4 +1,4 @@
-const CACHE_NAME = "busan-calltaxi-v3";
+const CACHE_NAME = "busan-calltaxi-v4";
 const PRECACHE_URLS = ["/icon.svg", "/maskable-icon.svg"];
 
 self.addEventListener("install", (event) => {
@@ -28,6 +28,9 @@ self.addEventListener("fetch", (event) => {
     );
     return;
   }
+
+  // Next.js manages its versioned scripts and styles; never cache API or RSC responses here.
+  if (!/\.(svg|png|jpg|jpeg|webp|ico)$/i.test(url.pathname)) return;
 
   event.respondWith(
     caches.match(request).then((cached) => {

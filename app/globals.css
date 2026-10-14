@@ -125,12 +125,6 @@ select {
   background-size: cover;
 }
 
-.hero-international {
-  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.36)), url("/busan-international.webp");
-  background-position: center;
-  background-size: cover;
-}
-
 .glass-panel {
   background: color-mix(in oklab, var(--card) 76%, transparent);
   backdrop-filter: blur(18px);

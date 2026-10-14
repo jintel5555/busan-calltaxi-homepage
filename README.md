@@ -124,7 +124,9 @@ AI 후기 생성은 다음 입력값을 사용합니다.
 
 히어로 배경은 Wikimedia Commons의 “Gwangan Bridge at Night, Busan” 이미지를 사용합니다. 저작자 Ken Eckert, 라이선스 CC BY-SA 4.0입니다.
 
-해외 페이지 배경은 같은 사진을 너비 1600px로 축소하고 WebP로 변환한 `public/busan-international.webp`입니다. 이 변환 이미지도 CC BY-SA 4.0이며, 해외 페이지 Footer에 원본과 라이선스 링크를 표기합니다.
+해외 페이지의 새 메인 사진과 코스 사진은 `busan-coast.webp` (Masterhatch, CC BY-SA 4.0), `busan-gamcheon.webp` (Christophe95, CC BY-SA 4.0), `busan-night-view.webp` (lumoplank, CC0 1.0)입니다. 원본은 Wikimedia Commons이며, 크기를 줄이고 WebP로 변환했습니다. `lib/international-media.ts`와 해외 Footer의 사진 크레딧에 원본 및 라이선스 링크가 있습니다. 해외 전용 색상과 반응형 레이아웃은 `components/international/international.module.css`에서 관리합니다.
+
+개발 환경에서는 이 사이트의 서비스워커를 해제하고 관련 캐시만 비웁니다. 운영 서비스워커는 이미지 파일만 저장하며, CSS·JavaScript·API·RSC 응답은 직접 캐시하지 않습니다.
 
 ## 운영 전 교체할 것
 
