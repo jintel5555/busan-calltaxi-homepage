@@ -18,6 +18,7 @@ import {
 import { HomeFaqPreview } from "@/components/home/home-faq-preview";
 import { HomeReviewShowcase } from "@/components/home/home-review-showcase";
 import { LiveInquiryStrip } from "@/components/home/live-inquiry-strip";
+import { LanguageEntry } from "@/components/site/language-entry";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -60,7 +61,8 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="hero-busan relative flex min-h-[calc(100svh-4rem)] items-center text-white">
+      <LanguageEntry />
+      <section id="korean-home" className="hero-busan relative flex min-h-[calc(100svh-4rem)] scroll-mt-36 items-center text-white">
         <div className="absolute inset-0 bg-black/10" />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-8 md:py-14">
           <div className="soft-rise max-w-3xl space-y-5">

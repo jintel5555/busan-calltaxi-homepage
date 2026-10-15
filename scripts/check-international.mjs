@@ -77,31 +77,70 @@ async function run() {
         await page.screenshot({ path: path.join(screenshotDir, `${pathname.slice(1)}-${width}-theme.png`) });
         console.log(`PASS ${pathname} ${width}px: locale, contacts, navigation, metadata, images, contrast, layout, theme`);
       }
+      await page.goto(baseUrl);
+      await page.locator("#language-selection").waitFor();
+      assert.equal(new URL(page.url()).pathname, "/");
+      assert.equal(await page.locator("#language-selection a").count(), 4);
+      assert.equal(await page.locator("dialog").count(), 0);
+      await checkOverflow(page);
+      await page.screenshot({ path: path.join(screenshotDir, `language-selection-${width}.png`) });
+      console.log(`PASS persistent inline language selection ${width}px`);
       await context.close();
     }
 
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, permissions: ["clipboard-read", "clipboard-write"] });
     const page = await context.newPage();
     page.on("pageerror", (error) => errors.push(`${page.url()}: ${error.message}`));
-    await page.goto(baseUrl);
-    await page.locator("dialog[open]").waitFor();
-    assert.equal(await page.locator("dialog button").count(), 4);
-    await checkOverflow(page);
+    await page.goto(`${baseUrl}/en`);
+    for (const previous of ["en", "ja", "zh-tw"]) {
+      await page.evaluate((locale) => {
+        localStorage.setItem("busan_site_language", locale);
+        localStorage.setItem("unrelated_preference", "keep");
+        document.cookie = `busan_site_language=${locale}; Path=/; SameSite=Lax`;
+        document.cookie = "unrelated_preference=keep; Path=/; SameSite=Lax";
+      }, previous);
+      await page.goto(baseUrl);
+      await page.locator("#language-selection").waitFor();
+      await page.waitForFunction(() => localStorage.getItem("busan_site_language") === null);
+      assert.equal(new URL(page.url()).pathname, "/");
+      const storage = await page.evaluate(() => ({ unrelated: localStorage.getItem("unrelated_preference"), cookies: document.cookie }));
+      assert.equal(storage.unrelated, "keep");
+      assert(storage.cookies.includes("unrelated_preference=keep"));
+      assert(!storage.cookies.includes("busan_site_language="));
+      assert.equal(await page.locator("dialog").count(), 0);
+    }
     await page.screenshot({ path: path.join(screenshotDir, "first-visit.png") });
-    await page.getByRole("button", { name: "日本 · 日本語", exact: true }).click();
+    await page.getByRole("link", { name: "日本 · 日本語", exact: true }).click();
     await page.waitForURL("**/ja");
+    await page.reload();
+    assert.equal(new URL(page.url()).pathname, "/ja");
     await page.goto(baseUrl);
-    await page.waitForURL("**/ja");
-    assert.equal(await page.locator("dialog[open]").count(), 0);
+    await page.locator("#language-selection").waitFor();
+    assert.equal(new URL(page.url()).pathname, "/");
+    await page.reload();
+    await page.locator("#language-selection").waitFor();
+    await page.getByRole("link", { name: "한국 · 한국어", exact: true }).click();
+    await page.waitForFunction(() => location.hash === "#korean-home" && document.getElementById("korean-home").getBoundingClientRect().top < 150);
+    await page.getByRole("link", { name: "台灣 · 繁體中文", exact: true }).click();
+    await page.waitForURL("**/zh-tw");
     await page.locator('header select').selectOption("ko");
     await page.waitForURL(`${baseUrl}/`);
+    await page.locator("#language-selection").waitFor();
     assert.equal(await page.locator('a[href="tel:050713337114"]').count() > 0, true);
-    assert.equal(await page.locator("dialog[open]").count(), 0);
+    assert.equal(await page.locator("dialog").count(), 0);
     await checkOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, "korean-home.png") });
     await page.goto(`${baseUrl}/admin`);
-    assert.equal(await page.locator("dialog[open]").count(), 0);
-    console.log("PASS first visit, saved preference, Korean return, admin access");
+    assert.equal(await page.locator("dialog").count(), 0);
+    assert.equal(await page.locator("#language-selection").count(), 0);
+    const noScriptContext = await browser.newContext({ javaScriptEnabled: false });
+    const noScriptPage = await noScriptContext.newPage();
+    await noScriptPage.goto(baseUrl);
+    assert.equal(await noScriptPage.locator("#language-selection a").count(), 4);
+    await noScriptPage.getByRole("link", { name: "International · English", exact: true }).click();
+    assert.equal(new URL(noScriptPage.url()).pathname, "/en");
+    await noScriptContext.close();
+    console.log("PASS legacy preference migration, preserved unrelated storage, home revisit/reload, language links, Korean anchor, admin access, no-JavaScript selection");
 
     const fallbackContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
     await fallbackContext.route("**/*.webp", (route) => route.abort());

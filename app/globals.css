@@ -83,10 +83,6 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-.language-entry::backdrop {
-  backdrop-filter: blur(6px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .soft-rise, .pulse-ring, .ticker { animation: none; }

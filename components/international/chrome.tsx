@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AtSign, Camera, CarFront, Globe2, MessageCircle, MessageSquareText } from "lucide-react";
-import { LanguageSwitcher, rememberLanguage } from "@/components/site/language-switcher";
+import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { internationalContacts, internationalCopy, languageOptions, type InternationalLocale } from "@/lib/international";
 import { internationalDesignCopy, internationalPhotos } from "@/lib/international-media";
@@ -63,7 +63,7 @@ export function InternationalFooter({ locale }: { locale: InternationalLocale })
         </div>
         <div className={styles.footerBottom}>
           <nav aria-label={copy.language} className={styles.languageLinks}>
-            {languageOptions.map((option) => <Link key={option.locale} href={option.path} lang={option.lang} onClick={() => rememberLanguage(option.locale)}>{option.shortLabel}</Link>)}
+            {languageOptions.map((option) => <Link key={option.locale} href={option.path} lang={option.lang}>{option.shortLabel}</Link>)}
           </nav>
           <details className={styles.credits}>
             <summary>{internationalDesignCopy[locale].photoCredits}</summary>

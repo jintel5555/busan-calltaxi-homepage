@@ -4,17 +4,6 @@ import { Languages } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { languageOptions, type SiteLocale } from "@/lib/international";
 
-export const languagePreferenceKey = "busan_site_language";
-
-export function rememberLanguage(locale: SiteLocale) {
-  try {
-    localStorage.setItem(languagePreferenceKey, locale);
-  } catch {
-    // Browsers with restricted storage can still navigate between languages.
-  }
-  document.cookie = `${languagePreferenceKey}=${locale}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
-}
-
 export function LanguageSwitcher({ locale = "ko", label = "언어 선택" }: { locale?: SiteLocale; label?: string }) {
   const router = useRouter();
 
@@ -29,7 +18,6 @@ export function LanguageSwitcher({ locale = "ko", label = "언어 선택" }: { l
         onChange={(event) => {
           const next = languageOptions.find((option) => option.locale === event.target.value);
           if (!next) return;
-          rememberLanguage(next.locale);
           router.push(next.path);
         }}
       >
